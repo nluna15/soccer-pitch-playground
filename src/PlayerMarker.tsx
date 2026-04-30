@@ -46,7 +46,6 @@ export function PlayerMarker({
         'sp-absolute sp-cursor-default sp-pointer-events-auto',
         hovered ? 'sp-z-30' : 'sp-z-10',
       ].join(' ')}
-      style={{ x: '-50%', y: '-50%' }}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       onFocus={handleEnter}
@@ -54,10 +53,15 @@ export function PlayerMarker({
       tabIndex={0}
       aria-label={`${player.name}${positionLabel ? `, ${positionLabel}` : ''}`}
     >
-      {/* Dot: sized container anchored to the formation coordinate.
-       * Labels are positioned absolutely below the dot so toggling their
-       * visibility never shifts the dot's center. */}
-      <div className="sp-relative sp-w-[clamp(28px,7.5%,52px)] sp-aspect-square">
+      {/* The motion.div is a zero-size anchor pinned exactly at (slot.x, slot.y).
+       * The dot below is translated -50%/-50% relative to ITS OWN size, so the
+       * dot's center always lands on the slot — independent of avatar size,
+       * label visibility, or any sibling chrome. Bumping the clamp width can
+       * never break centering with this structure. */}
+      <div
+        className="sp-absolute sp-w-[clamp(37px,9.98%,69px)] sp-aspect-square"
+        style={{ top: 0, left: 0, transform: 'translate(-50%, -50%)' }}
+      >
         <div
           className={[
             'sp-relative sp-w-full sp-h-full sp-rounded-full',
@@ -91,15 +95,11 @@ export function PlayerMarker({
 
         {showFlag && flag && (
           <span
-            className={[
-              'sp-absolute sp--bottom-1 sp-text-[11px] sp-leading-none',
-              'sp-rounded-full sp-px-1 sp-py-0.5 sp-shadow',
-            ].join(' ')}
-            style={{
-              right: 'calc(1.2rem)',
-              background: 'var(--sp-card-bg)',
-              border: '1px solid var(--sp-card-border)',
-            }}
+            className="sp-absolute sp-text-[15px] sp-leading-none"
+            // Pin the flag to the dot's lower-right using dot-relative offsets
+            // so it tracks the avatar at any size instead of drifting with a
+            // fixed rem value.
+            style={{ right: '-12%', bottom: '-8%' }}
             aria-hidden="true"
           >
             {flag}
