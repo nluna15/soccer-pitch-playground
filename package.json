@@ -19,6 +19,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "build:demo": "vite build --config vite.demo.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "keywords": ["react", "soccer", "football", "pitch", "formation", "lineup"],
