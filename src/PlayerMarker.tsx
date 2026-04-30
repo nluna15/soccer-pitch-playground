@@ -12,6 +12,7 @@ type Props = {
   showFlag: boolean;
   showPosition: boolean;
   onHoverChange: (player: Player | null) => void;
+  flipBelow?: boolean;
 };
 
 export function PlayerMarker({
@@ -21,9 +22,10 @@ export function PlayerMarker({
   showFlag,
   showPosition,
   onHoverChange,
+  flipBelow: flipBelowOverride,
 }: Props) {
   const [hovered, setHovered] = useState(false);
-  const flipBelow = slot.y < 18;
+  const flipBelow = flipBelowOverride ?? slot.y < 18;
   const positionLabel = player.position ?? slot.role;
   const flag = flagEmoji(player.countryCode);
 

@@ -52,6 +52,32 @@
   );
 }
 
+/* ---------------------------------------------------------------- *
+ *  Substitutes (bench) section                                      *
+ *  Stacked below the pitch stage. The row gives absolutely-         *
+ *  positioned PlayerMarkers a sized parent so the dot centers on    *
+ *  the row's mid-line and the labels hang into the lower half.      *
+ * ---------------------------------------------------------------- */
+.sp-bench {
+  margin-top: 1px;
+  width: 100%;
+}
+
+.sp-bench-title {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sp-name-fg);
+  opacity: 0.65;
+  margin-bottom: 1px;
+}
+
+.sp-bench-row {
+  height: 55px;
+}
+
 .sp-soccer-pitch[data-sp-theme="night"] {
   --sp-pitch-grass-1: #0d2233;
   --sp-pitch-grass-2: #0a1c2a;

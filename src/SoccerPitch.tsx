@@ -2,7 +2,10 @@ import { LayoutGroup } from 'framer-motion';
 import type { Formation, FormationSlot, SoccerPitchProps } from './types';
 import { Pitch } from './Pitch';
 import { PlayerMarker } from './PlayerMarker';
+import { Bench } from './Bench';
 import { formations } from './formations';
+
+const MAX_BENCH = 5;
 
 /* -------------------------------------------------------------------------- *
  *  Projection geometry
@@ -62,6 +65,7 @@ export function SoccerPitch({
   showNames = true,
   showFlags = true,
   showPositions = true,
+  bench,
   className,
   onPlayerHover,
 }: SoccerPitchProps) {
@@ -82,10 +86,17 @@ export function SoccerPitch({
       }
       ids.add(p.id);
     }
+    if (bench && bench.length > MAX_BENCH) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[soccer-pitch] bench has ${bench.length} entries; only the first ${MAX_BENCH} will render.`,
+      );
+    }
   }
 
   const handleHover = onPlayerHover ?? (() => undefined);
   const pairs = resolved.slots.map((slot, i) => ({ slot, player: players[i] }));
+  const benchPlayers = (bench ?? []).slice(0, MAX_BENCH);
 
   return (
     <div
@@ -95,64 +106,76 @@ export function SoccerPitch({
         'sp-relative sp-w-full',
         className ?? '',
       ].join(' ')}
-      style={{ aspectRatio: '4 / 5' }}
     >
-      {/* -------------------------------------------------------------- *
-       *  Stage 1 — Pitch stage
-       *  Tilted 45deg around its center. Holds only the pitch surface.
-       *  Perspective is local to this stage so it never leaks into the
-       *  player stage above it.
-       * -------------------------------------------------------------- */}
       <div
-        className="sp-absolute sp-inset-0"
-        style={{ perspective: '1400px' }}
+        className="sp-relative sp-w-full"
+        style={{ aspectRatio: '4 / 5', marginBottom: '-8%' }}
       >
+        {/* -------------------------------------------------------------- *
+         *  Stage 1 — Pitch stage
+         *  Tilted 45deg around its center. Holds only the pitch surface.
+         *  Perspective is local to this stage so it never leaks into the
+         *  player stage above it.
+         * -------------------------------------------------------------- */}
         <div
           className="sp-absolute sp-inset-0"
+          style={{ perspective: '1400px' }}
+        >
+          <div
+            className="sp-absolute sp-inset-0"
+            style={{
+              transform: `rotateX(${TILT_DEG}deg)`,
+              transformOrigin: '50% 50%',
+            }}
+          >
+            <div className="sp-pitch-surface sp-absolute sp-inset-0 sp-rounded-xl sp-overflow-hidden">
+              <Pitch />
+            </div>
+          </div>
+        </div>
+
+        {/* -------------------------------------------------------------- *
+         *  Stage 2 — Player stage
+         *  Upright in screen space (no rotateX, no perspective). The stage
+         *  occupies the trapezoid's bounding box; player coordinates are
+         *  re-projected so they land on the trapezoid's slanted left/right
+         *  edges, visually tracing the footprint of the tilted pitch.
+         *  No clip-path — player labels and hover cards must overflow the
+         *  trapezoid freely. Players render at 0deg rotation, so
+         *  PlayerMarker needs no counter-rotation.
+         * -------------------------------------------------------------- */}
+        <div
+          className="sp-absolute sp-left-0 sp-right-0"
           style={{
-            transform: `rotateX(${TILT_DEG}deg)`,
-            transformOrigin: '50% 50%',
+            top: `${TRAP_TOP_PCT}%`,
+            height: `${TRAP_HEIGHT_PCT}%`,
           }}
         >
-          <div className="sp-pitch-surface sp-absolute sp-inset-0 sp-rounded-xl sp-overflow-hidden">
-            <Pitch />
-          </div>
+          <LayoutGroup>
+            {pairs.map(({ slot, player }) =>
+              player ? (
+                <PlayerMarker
+                  key={player.id}
+                  player={player}
+                  slot={projectSlot(slot)}
+                  showName={showNames}
+                  showFlag={showFlags}
+                  showPosition={showPositions}
+                  onHoverChange={handleHover}
+                />
+              ) : null,
+            )}
+          </LayoutGroup>
         </div>
       </div>
 
-      {/* -------------------------------------------------------------- *
-       *  Stage 2 — Player stage
-       *  Upright in screen space (no rotateX, no perspective). The stage
-       *  occupies the trapezoid's bounding box; player coordinates are
-       *  re-projected so they land on the trapezoid's slanted left/right
-       *  edges, visually tracing the footprint of the tilted pitch.
-       *  No clip-path — player labels and hover cards must overflow the
-       *  trapezoid freely. Players render at 0deg rotation, so
-       *  PlayerMarker needs no counter-rotation.
-       * -------------------------------------------------------------- */}
-      <div
-        className="sp-absolute sp-left-0 sp-right-0"
-        style={{
-          top: `${TRAP_TOP_PCT}%`,
-          height: `${TRAP_HEIGHT_PCT}%`,
-        }}
-      >
-        <LayoutGroup>
-          {pairs.map(({ slot, player }) =>
-            player ? (
-              <PlayerMarker
-                key={player.id}
-                player={player}
-                slot={projectSlot(slot)}
-                showName={showNames}
-                showFlag={showFlags}
-                showPosition={showPositions}
-                onHoverChange={handleHover}
-              />
-            ) : null,
-          )}
-        </LayoutGroup>
-      </div>
+      <Bench
+        players={benchPlayers}
+        showName={showNames}
+        showFlag={showFlags}
+        showPosition={showPositions}
+        onHoverChange={handleHover}
+      />
     </div>
   );
 }

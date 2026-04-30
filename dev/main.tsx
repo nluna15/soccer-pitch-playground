@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import {
   SoccerPitch,
   formationNames,
+  type BenchPlayer,
   type FormationName,
   type Player,
   type Theme,
@@ -24,6 +25,16 @@ const players: Player[] = [
   { id: '11', name: 'Díaz',         countryCode: 'CO', extras: { goals: 7 } },
 ];
 
+const benchPlayers: BenchPlayer[] = [
+  { id: 'b1', name: 'Kelleher',  countryCode: 'IE', position: 'GK',  extras: { apps: 6 } },
+  { id: 'b2', name: 'Endo',      countryCode: 'JP', position: 'DM',  extras: { tackles: 22 } },
+  { id: 'b3', name: 'Gakpo',     countryCode: 'NL', position: 'LW',  extras: { goals: 5 } },
+  { id: 'b4', name: 'Elliott',   countryCode: 'GB', position: 'AM',  extras: { goals: 3 } },
+  { id: 'b5', name: 'Tsimikas',  countryCode: 'GR', position: 'LB',  extras: { assists: 4 } },
+];
+
+const benchCounts = [1, 2, 3, 4, 5] as const;
+
 function App() {
   const [formation, setFormation] = useState<FormationName>('4-3-3');
   const [theme, setTheme] = useState<Theme>('grass');
@@ -31,6 +42,8 @@ function App() {
   const [showNames, setShowNames] = useState(true);
   const [showFlags, setShowFlags] = useState(true);
   const [showPositions, setShowPositions] = useState(true);
+  const [showBench, setShowBench] = useState(true);
+  const [benchCount, setBenchCount] = useState<number>(3);
 
   const infoToggles: Array<{ key: string; label: string; value: boolean; setValue: (v: boolean) => void }> = [
     { key: 'name',     label: 'Name',     value: showNames,     setValue: setShowNames },
@@ -102,6 +115,48 @@ function App() {
           </div>
         </div>
 
+        <div>
+          <label style={labelStyle}>Bench</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showBench}
+              onClick={() => setShowBench(!showBench)}
+              style={{
+                ...chipStyle,
+                alignSelf: 'flex-start',
+                background: showBench ? '#6ea8ff' : 'transparent',
+                color: showBench ? '#0b1020' : '#e8efff',
+                borderColor: showBench ? '#6ea8ff' : 'rgba(255,255,255,0.18)',
+              }}
+            >
+              {showBench ? 'On' : 'Off'}
+            </button>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', opacity: showBench ? 1 : 0.4 }}>
+              {benchCounts.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setBenchCount(n)}
+                  disabled={!showBench}
+                  style={{
+                    ...chipStyle,
+                    minWidth: 32,
+                    textAlign: 'center',
+                    background: benchCount === n ? '#6ea8ff' : 'transparent',
+                    color: benchCount === n ? '#0b1020' : '#e8efff',
+                    borderColor: benchCount === n ? '#6ea8ff' : 'rgba(255,255,255,0.18)',
+                    cursor: showBench ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div style={{ marginTop: 'auto', fontSize: 12, opacity: 0.7 }}>
           {hovered ? (
             <>
@@ -123,6 +178,7 @@ function App() {
             showNames={showNames}
             showFlags={showFlags}
             showPositions={showPositions}
+            bench={showBench ? benchPlayers.slice(0, benchCount) : undefined}
             onPlayerHover={setHovered}
           />
         </div>

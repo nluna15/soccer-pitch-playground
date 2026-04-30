@@ -9,5 +9,6 @@ export type {
   Formation,
   CustomFormation,
   Theme,
+  BenchPlayer,
   SoccerPitchProps,
 } from './types';
