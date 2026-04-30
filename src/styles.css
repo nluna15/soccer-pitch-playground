@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------- *
+ *  Default (grass) theme variables.                                *
+ *  Overridden by [data-sp-theme="..."] blocks below.               *
+ * ---------------------------------------------------------------- */
+.sp-soccer-pitch {
+  --sp-pitch-grass-1: #2f8a3f;
+  --sp-pitch-grass-2: #2a7d39;
+  --sp-pitch-line: rgba(255, 255, 255, 0.85);
+
+  --sp-player-bg: #ffffff;
+  --sp-player-ring: #ffffff;
+  --sp-player-initials: #1a1a1a;
+
+  --sp-name-bg: rgba(0, 0, 0, 0.78);
+  --sp-name-fg: #ffffff;
+  --sp-role-fg: rgba(255, 255, 255, 0.85);
+
+  --sp-card-bg: #111827;
+  --sp-card-fg: #f9fafb;
+  --sp-card-border: rgba(255, 255, 255, 0.12);
+
+  /* No outer green background — the pitch surface itself supplies the grass.
+     This keeps the field tightly cropped and lets the surrounding area stay
+     transparent so the page background shows through. */
+  background: transparent;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Pitch surface: drop-shadow lifts the field off the page and the
+   subtle gradient overlay adds a touch of depth. */
+.sp-pitch-surface {
+  filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.35));
+}
+
+.sp-pitch-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+}
+
+.sp-soccer-pitch[data-sp-theme="night"] {
+  --sp-pitch-grass-1: #0d2233;
+  --sp-pitch-grass-2: #0a1c2a;
+  --sp-pitch-line: rgba(178, 217, 255, 0.7);
+
+  --sp-player-bg: #0b1727;
+  --sp-player-ring: #6ea8ff;
+  --sp-player-initials: #e8efff;
+
+  --sp-name-bg: rgba(8, 14, 24, 0.85);
+  --sp-name-fg: #e8efff;
+  --sp-role-fg: rgba(178, 217, 255, 0.8);
+
+  --sp-card-bg: #0b1727;
+  --sp-card-fg: #e8efff;
+  --sp-card-border: rgba(110, 168, 255, 0.25);
+}
+
+.sp-soccer-pitch[data-sp-theme="minimal"] {
+  --sp-pitch-grass-1: #f5f7fa;
+  --sp-pitch-grass-2: #eef1f5;
+  --sp-pitch-line: rgba(20, 24, 33, 0.45);
+
+  --sp-player-bg: #ffffff;
+  --sp-player-ring: #1a1a1a;
+  --sp-player-initials: #1a1a1a;
+
+  --sp-name-bg: #1a1a1a;
+  --sp-name-fg: #ffffff;
+  --sp-role-fg: rgba(20, 24, 33, 0.7);
+
+  --sp-card-bg: #ffffff;
+  --sp-card-fg: #111827;
+  --sp-card-border: rgba(20, 24, 33, 0.12);
+}
+
+.sp-soccer-pitch[data-sp-theme="chalkboard"] {
+  --sp-pitch-grass-1: #1a1f1c;
+  --sp-pitch-grass-2: #161a18;
+  --sp-pitch-line: rgba(245, 245, 235, 0.85);
+
+  --sp-player-bg: #f5f5eb;
+  --sp-player-ring: #f5f5eb;
+  --sp-player-initials: #1a1f1c;
+
+  --sp-name-bg: rgba(245, 245, 235, 0.92);
+  --sp-name-fg: #1a1f1c;
+  --sp-role-fg: rgba(245, 245, 235, 0.75);
+
+  --sp-card-bg: #f5f5eb;
+  --sp-card-fg: #1a1f1c;
+  --sp-card-border: rgba(20, 24, 33, 0.2);
+}
