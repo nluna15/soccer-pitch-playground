@@ -43,7 +43,7 @@ export function PlayerMarker({
       animate={{ top: `${slot.y}%`, left: `${slot.x}%` }}
       transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.9 }}
       className={[
-        'sp-absolute sp-flex sp-flex-col sp-items-center sp-cursor-default sp-pointer-events-auto',
+        'sp-absolute sp-cursor-default sp-pointer-events-auto',
         hovered ? 'sp-z-30' : 'sp-z-10',
       ].join(' ')}
       style={{ x: '-50%', y: '-50%' }}
@@ -54,6 +54,9 @@ export function PlayerMarker({
       tabIndex={0}
       aria-label={`${player.name}${positionLabel ? `, ${positionLabel}` : ''}`}
     >
+      {/* Dot: sized container anchored to the formation coordinate.
+       * Labels are positioned absolutely below the dot so toggling their
+       * visibility never shifts the dot's center. */}
       <div className="sp-relative sp-w-[clamp(28px,7.5%,52px)] sp-aspect-square">
         <div
           className={[
@@ -106,30 +109,39 @@ export function PlayerMarker({
         <AnimatePresence>
           {hovered && <HoverCard player={player} flipBelow={flipBelow} />}
         </AnimatePresence>
-      </div>
 
-      {showName && (
-        <div
-          className={[
-            'sp-mt-2 sp-px-1.5 sp-py-[1px] sp-rounded sp-text-[10px] sp-font-semibold',
-            'sp-leading-tight sp-whitespace-nowrap sp-tracking-wide sp-text-center',
-          ].join(' ')}
-          style={{
-            background: 'var(--sp-name-bg)',
-            color: 'var(--sp-name-fg)',
-          }}
-        >
-          {player.name}
-        </div>
-      )}
-      {showPosition && positionLabel && (
-        <div
-          className="sp-text-[9px] sp-uppercase sp-tracking-wider sp-mt-0.5 sp-text-center"
-          style={{ color: 'var(--sp-role-fg)' }}
-        >
-          {positionLabel}
-        </div>
-      )}
+        {/* Label stack — absolute, hung below the dot. Centered horizontally
+         * on the dot's center so its width never affects the dot's anchor. */}
+        {(showName || (showPosition && positionLabel)) && (
+          <div
+            className="sp-absolute sp-left-1/2 sp-top-full sp-flex sp-flex-col sp-items-center sp-mt-2 sp--translate-x-1/2"
+            aria-hidden="true"
+          >
+            {showName && (
+              <div
+                className={[
+                  'sp-px-1.5 sp-py-[1px] sp-rounded sp-text-[10px] sp-font-semibold',
+                  'sp-leading-tight sp-whitespace-nowrap sp-tracking-wide sp-text-center',
+                ].join(' ')}
+                style={{
+                  background: 'var(--sp-name-bg)',
+                  color: 'var(--sp-name-fg)',
+                }}
+              >
+                {player.name}
+              </div>
+            )}
+            {showPosition && positionLabel && (
+              <div
+                className="sp-text-[9px] sp-uppercase sp-tracking-wider sp-mt-0.5 sp-text-center"
+                style={{ color: 'var(--sp-role-fg)' }}
+              >
+                {positionLabel}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }
