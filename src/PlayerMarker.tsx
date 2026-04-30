@@ -54,10 +54,10 @@ export function PlayerMarker({
       tabIndex={0}
       aria-label={`${player.name}${positionLabel ? `, ${positionLabel}` : ''}`}
     >
-      <div className="sp-relative">
+      <div className="sp-relative sp-w-[clamp(28px,7.5%,52px)] sp-aspect-square">
         <div
           className={[
-            'sp-relative sp-w-[clamp(28px,7.5%,52px)] sp-aspect-square sp-rounded-full',
+            'sp-relative sp-w-full sp-h-full sp-rounded-full',
             'sp-overflow-hidden sp-flex sp-items-center sp-justify-center',
             'sp-shadow-md sp-transition-transform sp-duration-150',
             hovered ? 'sp-scale-110' : '',
@@ -89,10 +89,11 @@ export function PlayerMarker({
         {showFlag && flag && (
           <span
             className={[
-              'sp-absolute sp--bottom-1 sp--right-1 sp-text-[11px] sp-leading-none',
+              'sp-absolute sp--bottom-1 sp-text-[11px] sp-leading-none',
               'sp-rounded-full sp-px-1 sp-py-0.5 sp-shadow',
             ].join(' ')}
             style={{
+              right: 'calc(1.2rem)',
               background: 'var(--sp-card-bg)',
               border: '1px solid var(--sp-card-border)',
             }}
@@ -110,8 +111,8 @@ export function PlayerMarker({
       {showName && (
         <div
           className={[
-            'sp-mt-1 sp-px-1.5 sp-py-[1px] sp-rounded sp-text-[10px] sp-font-semibold',
-            'sp-leading-tight sp-whitespace-nowrap sp-tracking-wide',
+            'sp-mt-2 sp-px-1.5 sp-py-[1px] sp-rounded sp-text-[10px] sp-font-semibold',
+            'sp-leading-tight sp-whitespace-nowrap sp-tracking-wide sp-text-center',
           ].join(' ')}
           style={{
             background: 'var(--sp-name-bg)',
@@ -123,7 +124,7 @@ export function PlayerMarker({
       )}
       {showPosition && positionLabel && (
         <div
-          className="sp-text-[9px] sp-uppercase sp-tracking-wider sp-mt-0.5"
+          className="sp-text-[9px] sp-uppercase sp-tracking-wider sp-mt-0.5 sp-text-center"
           style={{ color: 'var(--sp-role-fg)' }}
         >
           {positionLabel}
