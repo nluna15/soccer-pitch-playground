@@ -67,6 +67,7 @@ export function SoccerPitch({
   showFlags = true,
   bench,
   className,
+  maxNameLength,
   onPlayerHover,
   onSlotToggle,
   onBenchToggle,
@@ -159,6 +160,7 @@ export function SoccerPitch({
                   slot={projectSlot(slot)}
                   showName={showNames}
                   showFlag={showFlags}
+                  maxNameLength={maxNameLength}
                   onHoverChange={handleHover}
                   onClick={onSlotToggle ? () => onSlotToggle(index) : undefined}
                 />
@@ -180,6 +182,7 @@ export function SoccerPitch({
         players={benchPlayers}
         showName={showNames}
         showFlag={showFlags}
+        maxNameLength={maxNameLength}
         onHoverChange={handleHover}
         onToggle={onBenchToggle}
       />

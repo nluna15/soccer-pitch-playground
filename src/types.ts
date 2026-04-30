@@ -49,6 +49,7 @@ export type SoccerPitchProps = {
   showFlags?: boolean;
   bench?: (BenchPlayer | null)[];
   className?: string;
+  maxNameLength?: number;
   onPlayerHover?: (player: Player | null) => void;
   onSlotToggle?: (index: number) => void;
   onBenchToggle?: (index: number) => void;

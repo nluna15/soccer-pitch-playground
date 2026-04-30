@@ -16,6 +16,7 @@ type FilledProps = CommonProps & {
   showName: boolean;
   showFlag: boolean;
   onHoverChange: (player: Player | null) => void;
+  maxNameLength?: number;
   blank?: false;
 };
 
@@ -55,7 +56,7 @@ function BlankMarker({ slot, blankLabel, onClick }: BlankProps) {
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
       <div
-        className="sp-absolute sp-w-[clamp(37px,9.98%,69px)] sp-aspect-square"
+        className="sp-absolute sp-w-[clamp(var(--sp-dot-min),var(--sp-dot-preferred),var(--sp-dot-max))] sp-aspect-square"
         style={{ top: 0, left: 0, transform: 'translate(-50%, -50%)' }}
       >
         <div
@@ -89,6 +90,7 @@ function FilledMarker({
   showName,
   showFlag,
   onHoverChange,
+  maxNameLength,
   flipBelow: flipBelowOverride,
   onClick,
 }: FilledProps) {
@@ -96,6 +98,10 @@ function FilledMarker({
   const flipBelow = flipBelowOverride ?? slot.y < 18;
   const ariaPosition = player.position ?? slot.role;
   const flag = flagEmoji(player.countryCode);
+  const displayName =
+    maxNameLength != null && player.name.length > maxNameLength
+      ? `${player.name.slice(0, maxNameLength)}...`
+      : player.name;
 
   const handleEnter = () => {
     setHovered(true);
@@ -130,7 +136,7 @@ function FilledMarker({
        * dot's center always lands on the slot — independent of avatar size,
        * label visibility, or any sibling chrome. */}
       <div
-        className="sp-absolute sp-w-[clamp(37px,9.98%,69px)] sp-aspect-square"
+        className="sp-absolute sp-w-[clamp(var(--sp-dot-min),var(--sp-dot-preferred),var(--sp-dot-max))] sp-aspect-square"
         style={{ top: 0, left: 0, transform: 'translate(-50%, -50%)' }}
       >
         <div
@@ -166,8 +172,8 @@ function FilledMarker({
 
         {showFlag && flag && (
           <span
-            className="sp-absolute sp-text-[15px] sp-leading-none"
-            style={{ right: '-12%', bottom: '-8%' }}
+            className="sp-absolute sp-leading-none"
+            style={{ right: '-12%', bottom: '-8%', fontSize: 'var(--sp-flag-fs)' }}
             aria-hidden="true"
           >
             {flag}
@@ -185,15 +191,16 @@ function FilledMarker({
           >
             <div
               className={[
-                'sp-px-1.5 sp-py-[1px] sp-rounded sp-text-[10px] sp-font-semibold',
+                'sp-px-1.5 sp-py-[1px] sp-rounded sp-font-semibold',
                 'sp-leading-tight sp-whitespace-nowrap sp-tracking-wide sp-text-center',
               ].join(' ')}
               style={{
                 background: 'var(--sp-name-bg)',
                 color: 'var(--sp-name-fg)',
+                fontSize: 'var(--sp-name-fs)',
               }}
             >
-              {player.name}
+              {displayName}
             </div>
           </div>
         )}

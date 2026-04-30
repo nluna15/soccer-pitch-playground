@@ -22,6 +22,12 @@
   --sp-card-fg: #f9fafb;
   --sp-card-border: rgba(255, 255, 255, 0.12);
 
+  --sp-dot-min: 37px;
+  --sp-dot-preferred: 9.98%;
+  --sp-dot-max: 69px;
+  --sp-name-fs: 10px;
+  --sp-flag-fs: 15px;
+
   /* No outer green background — the pitch surface itself supplies the grass.
      This keeps the field tightly cropped and lets the surrounding area stay
      transparent so the page background shows through. */

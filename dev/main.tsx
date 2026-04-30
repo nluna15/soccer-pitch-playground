@@ -77,7 +77,7 @@ function App() {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', padding: 24, gap: 24 }}>
+    <div style={{ display: 'flex', minHeight: '100vh', padding: 24, gap: 1 }}>
       <aside
         style={{
           width: panelOpen ? 240 : 44,
@@ -215,15 +215,16 @@ function App() {
               </div>
             </div>
 
-            <div style={{ marginTop: 'auto', fontSize: 12, opacity: 0.7 }}>
-              {hovered ? (
-                <>
-                  <div style={{ fontWeight: 600, color: '#e8efff' }}>Hovered:</div>
-                  <div>{hovered.name}</div>
-                </>
-              ) : (
-                <div>Hover a player…</div>
-              )}
+            <div style={noticeStyle} role="note">
+              <div style={noticeTitleStyle}>Player Hover on Desktop</div>
+              <div>
+                Hovering on a player opens panel that can be used to add player information
+                {hovered ? (
+                  <div style={{ marginTop: 6, fontWeight: 600, color: '#e8efff' }}>
+                    {hovered.name}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </>
         )}
@@ -242,6 +243,50 @@ function App() {
             onSlotToggle={togglePitchSlot}
             onBenchToggle={toggleBenchSlot}
           />
+        </div>
+
+        <div
+          style={{
+            marginTop: 32,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              opacity: 0.7,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            Mobile preview (&lt; 400px)
+          </div>
+          <div
+            style={{
+              width: 'min(360px, 100%)',
+              ['--sp-dot-min' as string]: '22.76px',
+              ['--sp-dot-max' as string]: '29.26px',
+              ['--sp-name-fs' as string]: '5px',
+              ['--sp-flag-fs' as string]: '10.8px',
+            } as React.CSSProperties}
+          >
+            <SoccerPitch
+              formation={formation}
+              theme={theme}
+              players={pitchPlayers}
+              showNames={showNames}
+              showFlags={showFlags}
+              bench={showBench ? benchWithBlanks : undefined}
+              maxNameLength={8}
+              onPlayerHover={setHovered}
+              onSlotToggle={togglePitchSlot}
+              onBenchToggle={toggleBenchSlot}
+            />
+          </div>
         </div>
       </main>
     </div>

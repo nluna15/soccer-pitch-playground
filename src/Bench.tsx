@@ -5,6 +5,7 @@ type Props = {
   players: (BenchPlayer | null)[];
   showName: boolean;
   showFlag: boolean;
+  maxNameLength?: number;
   onHoverChange: (player: Player | null) => void;
   onToggle?: (index: number) => void;
 };
@@ -13,6 +14,7 @@ export function Bench({
   players,
   showName,
   showFlag,
+  maxNameLength,
   onHoverChange,
   onToggle,
 }: Props) {
@@ -37,6 +39,7 @@ export function Bench({
                 slot={slot}
                 showName={showName}
                 showFlag={showFlag}
+                maxNameLength={maxNameLength}
                 onHoverChange={onHoverChange}
                 flipBelow={false}
                 onClick={onToggle ? () => onToggle(i) : undefined}
