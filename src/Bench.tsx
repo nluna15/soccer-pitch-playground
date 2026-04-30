@@ -2,19 +2,19 @@ import type { BenchPlayer, Player } from './types';
 import { PlayerMarker } from './PlayerMarker';
 
 type Props = {
-  players: BenchPlayer[];
+  players: (BenchPlayer | null)[];
   showName: boolean;
   showFlag: boolean;
-  showPosition: boolean;
   onHoverChange: (player: Player | null) => void;
+  onToggle?: (index: number) => void;
 };
 
 export function Bench({
   players,
   showName,
   showFlag,
-  showPosition,
   onHoverChange,
+  onToggle,
 }: Props) {
   if (players.length === 0) return null;
 
@@ -28,18 +28,30 @@ export function Bench({
           className="sp-absolute sp-left-0 sp-right-0"
           style={{ top: '50%', height: 0 }}
         >
-          {players.map((p, i) => (
-            <PlayerMarker
-              key={p.id}
-              player={p}
-              slot={{ x: step * (i + 1), y: 0, role: p.position ?? '' }}
-              showName={showName}
-              showFlag={showFlag}
-              showPosition={showPosition}
-              onHoverChange={onHoverChange}
-              flipBelow={false}
-            />
-          ))}
+          {players.map((p, i) => {
+            const slot = { x: step * (i + 1), y: 0, role: p?.position ?? '' };
+            return p ? (
+              <PlayerMarker
+                key={p.id}
+                player={p}
+                slot={slot}
+                showName={showName}
+                showFlag={showFlag}
+                onHoverChange={onHoverChange}
+                flipBelow={false}
+                onClick={onToggle ? () => onToggle(i) : undefined}
+              />
+            ) : (
+              <PlayerMarker
+                key={`blank-${i}`}
+                blank
+                blankLabel="+"
+                slot={slot}
+                flipBelow={false}
+                onClick={onToggle ? () => onToggle(i) : undefined}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

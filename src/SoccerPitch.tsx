@@ -29,15 +29,16 @@ const MAX_BENCH = 5;
  *    s(y)  = TOP_SCALE + (1 - TOP_SCALE) * (y / 100)
  *    xProj = 50 + (x - 50) * s(y)
  * -------------------------------------------------------------------------- */
-const TILT_DEG = 45;
+const TILT_DEG = 40;
 const TOP_SCALE = 0.66;
 const COS_TILT = Math.cos((TILT_DEG * Math.PI) / 180);
 
-/* Trapezoid bounds inside the parent container, expressed as percentages.
- * The pitch is tilted around its center, so the projected footprint is
- * vertically centered and compressed by COS_TILT. */
-const TRAP_HEIGHT_PCT = COS_TILT * 100;
-const TRAP_TOP_PCT = (100 - TRAP_HEIGHT_PCT) / 2;
+/* The wrapper's height equals the visible pitch footprint (cos-compressed),
+ * so the bounding box embeds tightly with no empty strips above or below.
+ * To make this work, the rotated pitch plane overflows its container by
+ * 1/cos: a taller plane projects down to exactly the wrapper height. */
+const PITCH_PLANE_HEIGHT_PCT = 100 / COS_TILT;
+const PITCH_PLANE_TOP_PCT = (100 - PITCH_PLANE_HEIGHT_PCT) / 2;
 
 function projectSlot(slot: FormationSlot): FormationSlot {
   const depthScale = TOP_SCALE + (1 - TOP_SCALE) * (slot.y / 100);
@@ -64,10 +65,11 @@ export function SoccerPitch({
   theme = 'grass',
   showNames = true,
   showFlags = true,
-  showPositions = true,
   bench,
   className,
   onPlayerHover,
+  onSlotToggle,
+  onBenchToggle,
 }: SoccerPitchProps) {
   const resolved = resolveFormation(formation);
 
@@ -80,6 +82,7 @@ export function SoccerPitch({
     }
     const ids = new Set<string>();
     for (const p of players) {
+      if (!p) continue;
       if (ids.has(p.id)) {
         // eslint-disable-next-line no-console
         console.warn(`[soccer-pitch] Duplicate player id: "${p.id}". Animation tracking requires unique ids.`);
@@ -95,7 +98,7 @@ export function SoccerPitch({
   }
 
   const handleHover = onPlayerHover ?? (() => undefined);
-  const pairs = resolved.slots.map((slot, i) => ({ slot, player: players[i] }));
+  const pairs = resolved.slots.map((slot, i) => ({ slot, player: players[i] ?? null, index: i }));
   const benchPlayers = (bench ?? []).slice(0, MAX_BENCH);
 
   return (
@@ -109,7 +112,7 @@ export function SoccerPitch({
     >
       <div
         className="sp-relative sp-w-full"
-        style={{ aspectRatio: '4 / 5', marginBottom: '-8%' }}
+        style={{ aspectRatio: `4 / ${5 * COS_TILT}` }}
       >
         {/* -------------------------------------------------------------- *
          *  Stage 1 — Pitch stage
@@ -122,8 +125,10 @@ export function SoccerPitch({
           style={{ perspective: '1400px' }}
         >
           <div
-            className="sp-absolute sp-inset-0"
+            className="sp-absolute sp-left-0 sp-right-0"
             style={{
+              top: `${PITCH_PLANE_TOP_PCT}%`,
+              height: `${PITCH_PLANE_HEIGHT_PCT}%`,
               transform: `rotateX(${TILT_DEG}deg)`,
               transformOrigin: '50% 50%',
             }}
@@ -144,15 +149,9 @@ export function SoccerPitch({
          *  trapezoid freely. Players render at 0deg rotation, so
          *  PlayerMarker needs no counter-rotation.
          * -------------------------------------------------------------- */}
-        <div
-          className="sp-absolute sp-left-0 sp-right-0"
-          style={{
-            top: `${TRAP_TOP_PCT}%`,
-            height: `${TRAP_HEIGHT_PCT}%`,
-          }}
-        >
+        <div className="sp-absolute sp-inset-0">
           <LayoutGroup>
-            {pairs.map(({ slot, player }) =>
+            {pairs.map(({ slot, player, index }) =>
               player ? (
                 <PlayerMarker
                   key={player.id}
@@ -160,10 +159,18 @@ export function SoccerPitch({
                   slot={projectSlot(slot)}
                   showName={showNames}
                   showFlag={showFlags}
-                  showPosition={showPositions}
                   onHoverChange={handleHover}
+                  onClick={onSlotToggle ? () => onSlotToggle(index) : undefined}
                 />
-              ) : null,
+              ) : (
+                <PlayerMarker
+                  key={`blank-${index}`}
+                  blank
+                  blankLabel={slot.role}
+                  slot={projectSlot(slot)}
+                  onClick={onSlotToggle ? () => onSlotToggle(index) : undefined}
+                />
+              ),
             )}
           </LayoutGroup>
         </div>
@@ -173,8 +180,8 @@ export function SoccerPitch({
         players={benchPlayers}
         showName={showNames}
         showFlag={showFlags}
-        showPosition={showPositions}
         onHoverChange={handleHover}
+        onToggle={onBenchToggle}
       />
     </div>
   );
