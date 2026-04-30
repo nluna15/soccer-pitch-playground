@@ -17,7 +17,6 @@
 
   --sp-name-bg: rgba(0, 0, 0, 0.78);
   --sp-name-fg: #ffffff;
-  --sp-role-fg: rgba(255, 255, 255, 0.85);
 
   --sp-card-bg: #111827;
   --sp-card-fg: #f9fafb;
@@ -59,7 +58,7 @@
  *  the row's mid-line and the labels hang into the lower half.      *
  * ---------------------------------------------------------------- */
 .sp-bench {
-  margin-top: 1px;
+  margin-top: 40px;
   width: 100%;
 }
 
@@ -89,7 +88,6 @@
 
   --sp-name-bg: rgba(8, 14, 24, 0.85);
   --sp-name-fg: #e8efff;
-  --sp-role-fg: rgba(178, 217, 255, 0.8);
 
   --sp-card-bg: #0b1727;
   --sp-card-fg: #e8efff;
@@ -107,7 +105,6 @@
 
   --sp-name-bg: #1a1a1a;
   --sp-name-fg: #ffffff;
-  --sp-role-fg: rgba(20, 24, 33, 0.7);
 
   --sp-card-bg: #ffffff;
   --sp-card-fg: #111827;
@@ -125,7 +122,6 @@
 
   --sp-name-bg: rgba(245, 245, 235, 0.92);
   --sp-name-fg: #1a1f1c;
-  --sp-role-fg: rgba(245, 245, 235, 0.75);
 
   --sp-card-bg: #f5f5eb;
   --sp-card-fg: #1a1f1c;

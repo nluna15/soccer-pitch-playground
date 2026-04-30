@@ -42,13 +42,14 @@ export type Theme = 'grass' | 'night' | 'minimal' | 'chalkboard';
 export type BenchPlayer = Player;
 
 export type SoccerPitchProps = {
-  players: Player[];
+  players: (Player | null)[];
   formation: FormationName | CustomFormation;
   theme?: Theme;
   showNames?: boolean;
   showFlags?: boolean;
-  showPositions?: boolean;
-  bench?: BenchPlayer[];
+  bench?: (BenchPlayer | null)[];
   className?: string;
   onPlayerHover?: (player: Player | null) => void;
+  onSlotToggle?: (index: number) => void;
+  onBenchToggle?: (index: number) => void;
 };
