@@ -269,6 +269,7 @@ function App() {
             style={{
               width: 'min(360px, 100%)',
               ['--sp-dot-min' as string]: '22.76px',
+              ['--sp-dot-preferred' as string]: '9.98%',
               ['--sp-dot-max' as string]: '29.26px',
               ['--sp-name-fs' as string]: '5px',
               ['--sp-flag-fs' as string]: '10.8px',
