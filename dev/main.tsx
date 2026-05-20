@@ -1,5 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Analytics } from '@vercel/analytics/react';
 import '../src/styles.css';
 import {
   SoccerPitch,
@@ -227,6 +228,28 @@ function App() {
                 ) : null}
               </div>
             </div>
+
+            <div style={{ marginTop: 'auto' }}>
+              <label style={labelStyle}>Got feedback?</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <a
+                  href="https://substack.com/@nehemiasluna"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={contactLinkStyle}
+                >
+                  Substack
+                </a>
+                <a
+                  href="https://linkedin.com/in/nmluna"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={contactLinkStyle}
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
           </>
         )}
       </aside>
@@ -335,6 +358,13 @@ const noticeTitleStyle: React.CSSProperties = {
   color: '#6ea8ff',
 };
 
+const contactLinkStyle: React.CSSProperties = {
+  fontSize: 13,
+  color: '#6ea8ff',
+  textDecoration: 'none',
+  fontWeight: 600,
+};
+
 const chipStyle: React.CSSProperties = {
   padding: '5px 10px',
   fontSize: 12,
@@ -349,5 +379,6 @@ const chipStyle: React.CSSProperties = {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
+    <Analytics />
   </StrictMode>,
 );

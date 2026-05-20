@@ -6,7 +6,9 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,21 +17,41 @@
     },
     "./style.css": "./dist/style.css"
   },
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build:demo": "vite build --config vite.demo.config.ts",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["react", "soccer", "football", "pitch", "formation", "lineup"],
+  "keywords": [
+    "react",
+    "soccer",
+    "football",
+    "pitch",
+    "formation",
+    "lineup"
+  ],
   "license": "MIT",
+  "author": "Nehemias Luna <luna.nehemias@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nluna15/soccer-pitch-playground.git"
+  },
+  "homepage": "https://github.com/nluna15/soccer-pitch-playground#readme",
+  "bugs": {
+    "url": "https://github.com/nluna15/soccer-pitch-playground/issues"
+  },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "dependencies": {
-    "framer-motion": "^11.11.0"
+    "@vercel/analytics": "^2.0.1",
+    "framer-motion": "^11.11.0",
+    "user": "^0.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
