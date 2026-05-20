@@ -88,6 +88,9 @@ function App() {
           gap: 18,
           transition: 'width 200ms ease',
           overflow: 'hidden',
+          position: 'sticky',
+          top: 24,
+          height: 'calc(100vh - 48px)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: panelOpen ? 'flex-end' : 'center' }}>
@@ -109,6 +112,16 @@ function App() {
 
         {panelOpen && (
           <>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 18,
+                overflowY: 'auto',
+                flex: 1,
+                minHeight: 0,
+              }}
+            >
             <h1 style={{ fontSize: 18, margin: 0 }}>soccer-pitch playground</h1>
             <p style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.5, margin: 0 }}>
               Hover a player for the tooltip. Switch formations to see animated transitions.
@@ -228,8 +241,9 @@ function App() {
                 ) : null}
               </div>
             </div>
+            </div>
 
-            <div style={{ marginTop: 'auto' }}>
+            <div>
               <label style={labelStyle}>Got feedback?</label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <a
