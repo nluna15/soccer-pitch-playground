@@ -1,5 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import '../src/styles.css';
 import {
   SoccerPitch,
   formationNames,
